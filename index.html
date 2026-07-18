@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoSmart - Suci Damayanti</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.85);
+            --text-dark: #1e293b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Particle Effect */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(105vh) translateX(0) scale(1); }
+            100% { transform: translateY(-5vh) translateX(50px) scale(1.5); }
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            border-bottom: 4px solid var(--secondary);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p { margin: 0.5rem 0 0 0; opacity: 0.8; font-size: 1.1rem; }
+
+        .author-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #64748b;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            border-radius: 25px;
+        }
+
+        nav button:hover { color: var(--secondary); }
+
+        nav button.active-nav {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto 4rem auto;
+            padding: 0 1rem;
+            min-height: 60vh;
+        }
+
+        .section { display: none; }
+        .active { display: block; animation: fadeInUp 0.5s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modern Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(to right, var(--secondary), #60a5fa);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Glassmorphism Card System */
+        .app-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            padding: 3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .app-card:hover { transform: translateY(-2px); }
+
+        /* ANIMASI PERPINDAHAN SLIDE */
+        .slide-fade-in {
+            animation: slideFX 0.5s forwards ease-out;
+        }
+
+        @keyframes slideFX {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .slide-text h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-top: 0;
+            font-weight: 800;
+        }
+
+        .slide-text ul { padding-left: 1.2rem; }
+        .slide-text li { margin-bottom: 0.8rem; }
+
+        /* MEDIA GAMBAR DINAMIS & SISTEM ANIMASI KUSTOM CSS */
+        .slide-image-container {
+            width: 100%;
+            height: 280px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+            transform-origin: center;
+        }
+
+        /* ── DAFTAR ANIMASI SESUAI KARAKTERISTIK GEOLOGI LAPISAN ── */
+        .anim-space-float {
+            animation: spaceFloat 8s infinite ease-in-out !important;
+        }
+        @keyframes spaceFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+        }
+
+        .anim-pan-crust {
+            animation: panCrust 12s infinite linear alternate !important;
+        }
+        @keyframes panCrust {
+            0% { transform: scale(1.05) translateX(-2%); }
+            100% { transform: scale(1.05) translateX(2%); }
+        }
+
+        .anim-magma-burn {
+            animation: magmaBurn 3s infinite ease-in-out alternate !important;
+        }
+        @keyframes magmaBurn {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(239,68,68,0.2)); }
+            100% { transform: scale(1.04); filter: drop-shadow(0 0 20px rgba(239,68,68,0.6)) saturate(1.3); }
+        }
+
+        .anim-core-spin {
+            animation: coreSpin 40s infinite linear !important;
+        }
+        @keyframes coreSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .anim-intense-pulse {
+            animation: intensePulse 2s infinite ease-in-out alternate !important;
+        }
+        @keyframes intensePulse {
+            0% { transform: scale(0.96); filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 25px #f59e0b) brightness(1.2); }
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(0,0,0,0.05);
+        }
+
+        .btn {
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        } 
+        
+        .btn-primary { background: var(--secondary); color: white; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3); }
+        .btn-primary:hover:not(:disabled) { background: #2563eb; transform: translateY(-1px); }
+        .btn-primary:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+
+        .btn-audio { background: #f1f5f9; color: var(--secondary); border: 1px solid #e2e8f0; padding: 0.6rem 1.2rem; border-radius: 50px; margin-bottom: 1.5rem; }
+        .btn-audio:hover { background: #e2e8f0; }
+
+        /* Quiz Styling */
+        .quiz-progress-text { font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 0.5rem; }
+        .quiz-question { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: 0; }
+        .options-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+        .option-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #334155;
+        }
+
+        .option-card:hover {
+            border-color: var(--secondary);
+            background: #eff6ff;
+            transform: translateX(4px);
+        }
+
+        /* Result Screen */
+        .result-screen { text-align: center; }
+        .score-badge {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef08a 0%, #fef08a 100%);
+            padding: 0.1rem 0.4rem;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-particles" id="particles-container"></div>
+
+    <header>
+        <h1>GeoSmart: Lapisan Bumi</h1>
+        <p>Edisi Media Pembelajaran Interaktif 3D</p>
+        <div class="author-badge">🧑‍💻 Developer: Suci Damayanti</div>
+    </header>
+
+    <nav>
+        <button id="nav-materi" class="active-nav" onclick="gantiMenu('materi')">📖 Materi</button>
+        <button id="nav-kuis" onclick="gantiMenu('kuis')">🎯 Uji Kuis</button>
+    </nav>
+
+    <div class="container">
+        
+        <div id="materi" class="section active">
+            <div class="progress-container">
+                <div class="progress-bar" id="materi-progress"></div>
+            </div>
+            
+            <div class="app-card">
+                <button class="btn btn-audio" onclick="suaraSlideSekarang()">🔊 Dengarkan Asisten Audio</button>
+                
+                <div class="slide-image-container">
+                    <img id="gambar-materi-dinamis" src="" alt="Ilustrasi Geografi">
+                </div>
+
+                <div class="slide-text" id="slide-dinamis"></div>
+
+                <div class="action-bar">
+                    <button class="btn btn-primary" id="btn-prev" onclick="geserSlide(-1)">⬅️ Back</button>
+                    <span style="font-weight: 700; color: #64748b;" id="indikator-slide">1 / 10</span>
+                    <button class="btn btn-primary" id="btn-next" onclick="geserSlide(1)">Next ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="kuis" class="section">
+            <div id="quiz-container" class="app-card">
+                <div class="quiz-progress-text" id="quiz-progress">Pertanyaan 1 dari 10</div>
+                <h3 class="quiz-question" id="question-text">Memuat Soal Pembelajaran...</h3>
+                <button class="btn btn-audio" onclick="suaraKuis()" style="margin-bottom: 1rem;">🔊 Bacakan Soal</button>
+                <div class="options-grid" id="options-container"></div>
+            </div>
+            
+            <div id="result-container" style="display: none;" class="app-card result-screen">
+                <h2 style="font-size: 2rem; margin: 0;">🎉 Evaluasi Selesai!</h2>
+                <p style="color: #64748b; font-weight: 600;">Skor Pencapaian Anda:</p>
+                <div class="score-badge" id="score-text">0</div>
+                <p id="evaluation-comment" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 2rem;"></p>
+                <button class="btn btn-primary" style="background: var(--accent); box-shadow: 0 4px 14px rgba(245,158,11,0.4);" onclick="restartQuiz()">Coba Lagi</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 GeoSmart App | Ditulis & Dirancang secara khusus oleh <strong>Suci Damayanti</strong>
+    </footer>
+
+    <script>
+        const synth = window.speechSynthesis;
+
+        function buatPartikel() {
+            const wadah = document.getElementById('particles-container');
+            for(let i = 0; i < 15; i++) {
+                const partikel = document.createElement('div');
+                partikel.className = 'particle';
+                partikel.style.width = Math.random() * 30 + 10 + 'px';
+                partikel.style.height = partikel.style.width;
+                partikel.style.left = Math.random() * 100 + 'vw';
+                partikel.style.animationDelay = Math.random() * 10 + 's';
+                partikel.style.animationDuration = Math.random() * 15 + 15 + 's';
+                wadah.appendChild(partikel);
+            }
+        }
+        buatPartikel();
+
+        // Menggunakan grafik SVG internal berkode khusus agar dijamin langsung muncul tanpa tergantung server internet luar.
+        const dataSlide = [
+            {
+                title: "1. 🌍 Pengantar Struktur Lapisan Bumi",
+                animClass: "anim-space-float", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><circle cx='200' cy='100' r='80' fill='%230284c7'/><path d='M150 70 q30 -20 60 -10 t40 40 t-40 40 t-60 -70' fill='%2322c55e'/><circle cx='200' cy='100' r='50' fill='%23ef4444'/><circle cx='200' cy='100' r='25' fill='%23f59e0b'/><circle cx='200' cy='100' r='10' fill='%23fff'/></svg>", 
+                html: `<p>Selamat datang di ruang belajar Geografi interaktif bersama saya, <strong>Suci Damayanti</strong>. Bumi yang kita pijak ini ternyata memiliki lapisan kompleks yang sangat dinamis.</p>
+                       <p>Secara mekanik, struktur internal bumi sangat mirip dengan anatomi <span class="highlight">sebutir telur rebus</span>:</p>
+                       <ul>
+                           <li><strong>Cangkang keras telur:</strong> Analog dengan Kerak Bumi yang tipis dan kaku.</li>
+                           <li><strong>Lapisan putih telur:</strong> Lapisan Mantel Bumi tebal yang elastis.</li>
+                           <li><strong>Kuning telur di pusat:</strong> Representasi dari Inti Bumi yang padat dan panas.</li>
+                       </ul>`
+            },
+            {
+                title: "2. ⛰️ Karakteristik Kerak Bumi (Crust)",
+                animClass: "anim-pan-crust", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><path d='M20 160 L100 80 L180 140 L280 60 L380 160 Z' fill='%23854d0e'/><rect x='0' y='160' width='400' height='40' fill='%23451a03'/></svg>", 
+                html: `<p>Kerak bumi merupakan kulit luar planet tempat seluruh kehidupan berlangsung. Ketebalannya sangat tipis dibanding lapisan lain, berkisar antara <span class="highlight">5 hingga 70 kilometer</span>.</p>
+                       <p>Kerak ini terbagi menjadi dua tipe utama:</p>
+                       <ul>
+                           <li><strong>Kerak Benua:</strong> Membentuk daratan, didominasi batuan granit ringan kaya silisium & aluminium (Sial).</li>
+                           <li><strong>Kerak Samudra:</strong> Membentuk dasar lautan, tersusun atas batuan basal padat kaya silisium & magnesium (Sima).</li>
+                       </ul>`
+            },
+            {
+                title: "3. 🗺️ Litosfer: Lempeng Kaku Kulit Bumi",
+                animClass: "anim-pan-crust", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><rect x='20' y='50' width='160' height='100' fill='%23b45309' rx='10'/><rect x='220' y='70' width='160' height='80' fill='%2378350f' rx='10'/><path d='M190 40 L210 160' stroke='%23ef4444' stroke-width='4' stroke-dasharray='5'/></svg>", 
+                html: `<p>Kata litosfer berasal dari bahasa Yunani, <i>lithos</i> berarti batuan, dan <i>sphaira</i> berarti bulatan. Lapisan ini mencakup seluruh kerak bumi beserta mantel paling atas yang kaku.</p>
+                       <p>Litosfer tidak berbentuk cangkang mulus, melainkan terpecah-pecah menjadi patahan lempeng tektonik raksasa yang mengapung dan bergerak aktif.</p>`
+            },
+            {
+                title: "4. 🔥 Kedahsyatan Mantel Bumi (Mantle)",
+                animClass: "anim-magma-burn", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><rect x='50' y='30' width='300' height='140' fill='%23ea580c' rx='15'/><text x='200' y='110' fill='white' font-weight='bold' text-anchor='middle' font-size='20'>80% Volume Bumi</text></svg>", 
+                html: `<p>Berada di bawah litosfer, Mantel Bumi meluas hingga kedalaman 2.900 km. Lapisan raksasa ini berbentuk selimut tebal yang menampung sekitar <span class="highlight">80% volume total bumi</span>!</p>
+                       <p>Suhu di lapisan mantel berkisar antara 1.000°C hingga 3.000°C, menjadikannya tempat akumulasi material semi-cair kental bertekanan tinggi.</p>`
+            },
+            {
+                title: "5. 🌊 Astenosfer: Mesin Penggerak Tektonik",
+                animClass: "anim-magma-burn", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><path d='M50 100 Q 100 50, 150 100 T 250 100 T 350 100' fill='none' stroke='%23dc2626' stroke-width='8'/><path d='M50 130 Q 100 80, 150 130 T 250 130 T 350 130' fill='none' stroke='%23f97316' stroke-width='6'/><text x='200' y='170' fill='%237c2d12' font-weight='bold' text-anchor='middle'>Arus Konveksi Magma</text></svg>", 
+                html: `<p>Astenosfer berada di zona mantel atas, tepat di bawah lempeng litosfer kaku. Karakteristik batuan di zona ini bersifat plastik dan dapat mengalir lambat akibat suhu ekstrem.</p>
+                       <p>Di sinilah roda penggerak bumi bekerja melalui **Arus Konveksi Panas**. Magma cair berputar menyalurkan energi panas ke atas dan menggeser lempeng tektonik di permukaannya.</p>`
+            },
+            {
+                title: "6. ⚡ Batas Mesosfer: Mantel Bawah Padat",
+                animClass: "anim-magma-burn", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><rect x='80' y='40' width='240' height='120' fill='%239a3412' rx='10'/><g fill='%23fff' opacity='0.3'><circle cx='120' cy='80' r='10'/><circle cx='280' cy='120' r='15'/><circle cx='200' cy='90' r='8'/></g><text x='200' y='110' fill='white' font-weight='bold' text-anchor='middle'>PADAT KARENA TEKANAN</text></svg>", 
+                html: `<p>Lebih dalam di bawah astenosfer terdapat lapisan Mantel Bawah atau Mesosfer, membentang dari kedalaman 660 km hingga batas inti bumi di 2.900 km.</p>
+                       <p>Meskipun bersuhu jauh lebih panas, material di mesosfer berwujud **padat kaku**. Hal ini terjadi akibat tekanan hidrostatik mahadahsyat yang memadatkan atom batuan.</p>`
+            },
+            {
+                title: "7. 💧 Misteri Inti Luar Bumi (Outer Core)",
+                animClass: "anim-core-spin", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><circle cx='200' cy='100' r='70' fill='%23f59e0b'/><circle cx='200' cy='100' r='40' fill='%231e293b'/><text x='200' y='105' fill='white' font-weight='bold' text-anchor='middle' font-size='12'>Besi &amp; Nikel Cair</text></svg>", 
+                html: `<p>Memasuki kedalaman 2.900 hingga 5.100 km, kita menjumpai lapisan Inti Luar Bumi. Panas di zona ini luar biasa ekstrem, mencapai 4.000°C hingga 5.000°C.</p>
+                       <p>Suhu tinggi ini melelehkan logam besi (Fe) dan nikel (Ni) sepenuhnya menjadi **cairan logam kental yang bergolak aktif**.</p>`
+            },
+            {
+                title: "8. 🛡️ Dinamo Bumi & Medan Magnetik",
+                animClass: "anim-core-spin", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><circle cx='200' cy='100' r='30' fill='%230f172a'/><path d='M200 40 C 100 40, 100 160, 200 160 C 300 160, 300 40, 200 40' fill='none' stroke='%233b82f6' stroke-width='3' stroke-dasharray='4'/><path d='M200 15 C 50 15, 50 185, 200 185 C 350 185, 350 15, 200 15' fill='none' stroke='%2360a5fa' stroke-width='2'/></svg>", 
+                html: `<p>Perputaran besi cair di Inti Luar akibat pengaruh rotasi planet menghasilkan efek dinamo yang memicu terbentuknya <span class="highlight">Medan Magnet Bumi</span>.</p>
+                       <p>Medan magnet memancar keluar membentuk perisai kompas tak kasat mata (Magnetosfer) yang membelokkan radiasi badai matahari agar atmosfer kita tetap aman.</p>`
+            },
+            {
+                title: "9. 💎 Kepadatan Ekstrem Inti Dalam Bumi",
+                animClass: "anim-intense-pulse", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><circle cx='200' cy='100' r='60' fill='%23ffffff' stroke='%23eab308' stroke-width='6'/><text x='200' y='105' fill='%23a16207' font-weight='bold' text-anchor='middle'>6.000°C (PADAT)</text></svg>", 
+                html: `<p>Lapisan terdalam di pusat bumi adalah Inti Dalam Bumi, berupa bola logam pekat dengan radius 1.220 km. Suhunya menyentuh **6.000°C—setara panas permukaan Matahari**!</p>
+                       <p>Meski sangat panas, inti dalam ini berwujud **padat murni kaku** akibat kompresi gravitasi total yang mengunci partikel logam agar tetap mengkristal rapat.</p>`
+            },
+            {
+                title: "10. 🔄 Hubungan Sistemik Antarlapisan",
+                animClass: "anim-space-float", 
+                imgUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'><path d='M100 100 L180 60 L260 140 L340 100' fill='none' stroke='%2310b981' stroke-width='5'/><circle cx='100' cy='100' r='10' fill='%23ef4444'/><circle cx='180' cy='60' r='10' fill='%23f59e0b'/><circle cx='260' cy='140' r='10' fill='%233b82f6'/><circle cx='340' cy='100' r='10' fill='%2310b981'/></svg>", 
+                html: `<p>Seluruh struktur internal planet ini bekerja dalam satu sistem mekanis terpadu:</p>
+                       <ul>
+                           <li>Inti bumi bertindak sebagai dapur energi penghasil panas.</li>
+                           <li>Panas memicu sirkulasi arus konveksi di Mantel (Astenosfer).</li>
+                           <li>Arus mantel menggeser Litosfer sehingga menghasilkan relief muka bumi yang kaya mineral.</li>
+                       </ul>`
+            }
+        ];
+
+        let indexSlideSekarang = 0;
+
+        function tampilkanSlide() {
+            synth.cancel(); 
+            const slide = dataSlide[indexSlideSekarang];
+
+            // 1. Perbarui Gambar & Picu Ulang Efek Animasi
+            const elemenGambar = document.getElementById('gambar-materi-dinamis');
+            
+            elemenGambar.className = "";
+            elemenGambar.src = slide.imgUrl;
+            elemenGambar.alt = "Ilustrasi untuk: " + slide.title;
+            
+            void elemenGambar.offsetWidth; 
+            elemenGambar.className = slide.animClass;
+
+            // 2. Perbarui Teks Materi
+            const wadahTeks = document.getElementById('slide-dinamis');
+            wadahTeks.innerHTML = `<h2>${slide.title}</h2>${slide.html}`;
+            
+            wadahTeks.classList.remove('slide-fade-in');
+            void wadahTeks.offsetWidth; 
+            wadahTeks.classList.add('slide-fade-in');
+            
+            document.getElementById('indikator-slide').innerText = `${indexSlideSekarang + 1} / ${dataSlide.length}`;
+            document.getElementById('btn-prev').disabled = (indexSlideSekarang === 0);
+            document.getElementById('btn-next').disabled = (indexSlideSekarang === dataSlide.length - 1);
+            
+            const persentase = ((indexSlideSekarang + 1) / dataSlide.length) * 100;
+            document.getElementById('materi-progress').style.width = persentase + '%';
+        }
+
+        function geserSlide(arah) {
+            indexSlideSekarang += arah;
+            tampilkanSlide();
+        }
+
+        function suaraSlideSekarang() {
+            bicarakan(document.getElementById('slide-dinamis').innerText);
+        }
+
+        const bankSoal = [
+            {
+                question: "1. Komponen penyusun kerak samudra didominasi oleh batuan basal dengan senyawa kimia utama berupa...",
+                options: ["Silisium dan Aluminium (Sial)", "Silisium dan Magnesium (Sima)", "Besi dan Nikel cair", "Kristal belerang murni"],
+                answer: 1
+            },
+            {
+                question: "2. Lapisan mantel bumi bagian atas yang bersifat plastis, kental, dan menjadi tempat terjadinya arus konveksi disebut...",
+                options: ["Litosfer", "Astenosfer", "Mesosfer", "Inti Luar"],
+                answer: 1
+            },
+            {
+                question: "3. Mengapa batuan di lapisan mesosfer (mantel bawah) berwujud padat meskipun suhunya jauh lebih panas dari astenosfer?",
+                options: ["Karena pengaruh pendinginan air bawah tanah", "Karena tidak mendapat suplai magma", "Akibat tekanan kompresi berat batuan di atasnya yang sangat dahsyat", "Karena tersusun dari es abadi purba"],
+                answer: 2
+            },
+            {
+                question: "4. Lapisan litosfer bumi terdiri atas komponen gabungan dari...",
+                options: ["Kerak samudra dan seluruh lapisan inti", "Kerak bumi secara utuh beserta mantel bagian paling atas yang kaku", "Astenosfer dan inti luar cair", "Magma cair dan sedimen batuan apung"],
+                answer: 1
+            },
+            {
+                question: "5. Pembentukan medan magnet bumi (magnetosfer) yang melindungi atmosfer dari badai matahari terjadi akibat...",
+                options: ["Pergeseran lempeng benua yang sangat cepat", "Pergolakan rotasi besi dan nikel cair di lapisan Inti Luar", "Tekanan kristalisasi atom besi di Inti Dalam", "Aktivitas vulkanisme gunung api bawah laut"],
+                answer: 1
+            },
+            {
+                question: "6. Lapisan bumi yang dianalogikan mirip bagian putih telur karena volumenya mendominasi 80% total tubuh bumi adalah...",
+                options: ["Kerak Bumi", "Mantel Bumi", "Inti Luar", "Inti Dalam"],
+                answer: 1
+            },
+            {
+                question: "7. Wujud fisik besi dan nikel pada lapisan Inti Bumi Bagian Luar adalah...",
+                options: ["Gas membara", "Padat murni kaku", "Cairan logam kental bergolak", "Kristal beku"],
+                answer: 2
+            },
+            {
+                question: "8. Suhu di pusat inti dalam bumi menyentuh 6.000°C yang setara dengan panas...",
+                options: ["Lava gunung api aktif", "Permukaan Matahari", "Suhu atmosfer planet Mars", "Kilatan petir kosmik"],
+                answer: 1
+            },
+            {
+                question: "9. Kata litosfer secara etimologi bahasa Yunani memiliki arti yaitu...",
+                options: ["Bulatan udara", "Lapisan air", "Bulatan batuan", "Lapisan api"],
+                answer: 2
+            },
+            {
+                question: "10. Penggerak utama pecahan lempeng-lempeng tektonik yang memicu gempa bumi dan pembentukan pegunungan di permukaan adalah...",
+                options: ["Arus konveksi panas di mantel/astenosfer", "Gaya gravitasi bulan dan matahari", "Angin topan atmosfer bumi", "Tekanan hidrostatis air samudra"],
+                answer: 0
+            }
+        ];
+
+        let indexSoalSekarang = 0;
+        let totalSkor = 0;
+
+        function gantiMenu(target) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+            
+            document.getElementById('nav-materi').classList.remove('active-nav');
+            document.getElementById('nav-kuis').classList.remove('active-nav');
+            document.getElementById('nav-' + target).classList.add('active-nav');
+            
+            synth.cancel();
+            if (target === 'materi') tampilkanSlide();
+            else if (target === 'kuis') restartQuiz();
+        }
+
+        function bicarakan(text) {
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 1.0;
+            synth.speak(utterance);
+        }
+
+        function muatSoal() {
+            const soalAktif = bankSoal[indexSoalSekarang];
+            document.getElementById('quiz-progress').innerText = `Pertanyaan ${indexSoalSekarang + 1} dari ${bankSoal.length}`;
+            document.getElementById('question-text').innerText = soalAktif.question;
+            
+            const wadahOpsi = document.getElementById('options-container');
+            wadahOpsi.innerHTML = '';
+
+            soalAktif.options.forEach((opsi, indeks) => {
+                const tombol = document.createElement('button');
+                tombol.className = 'option-card';
+                tombol.innerText = opsi;
+                tombol.onclick = () => verifikasiJawaban(indeks);
+                wadahOpsi.appendChild(tombol);
+            });
+        }
+
+        function suaraKuis() {
+            const soalAktif = bankSoal[indexSoalSekarang];
+            bicarakan(soalAktif.question);
+        }
+
+        function verifikasiJawaban(indeksDipilih) {
+            const soalAktif = bankSoal[indexSoalSekarang];
+            if (indeksDipilih === soalAktif.answer) {
+                totalSkor += 100 / bankSoal.length;
+                bicarakan("Hebat, jawaban benar!");
+                alert("Jawaban Benar! 🎉");
+            } else {
+                bicarakan("Jawaban kurang tepat.");
+                alert(`Kurang Tepat! Jawaban ilmiah yang benar: ${soalAktif.options[soalAktif.answer]}`);
+            }
+
+            indexSoalSekarang++;
+            if (indexSoalSekarang < bankSoal.length) muatSoal();
+            else tampilkanHasil();
+        }
+
+        function tampilkanHasil() {
+            document.getElementById('quiz-container').style.display = 'none';
+            const wadahHasil = document.getElementById('result-container');
+            wadahHasil.style.display = 'block';
+            
+            const skorAkhir = Math.round(totalSkor);
+            document.getElementById('score-text').innerText = skorAkhir;
+
+            let komentar = skorAkhir >= 70 ? "Luar Biasa! Pemahaman materi geografi Anda sangat matang." : "Jangan berkecil hati, mari pelajari ulang catatan materi 10 slide di atas!";
+            document.getElementById('evaluation-comment').innerText = komentar;
+            bicarakan(`Evaluasi selesai. Skor total Anda adalah ${skorAkhir}. ${komentar}`);
+        }
+
+        function restartQuiz() {
+            indexSoalSekarang = 0;
+            totalSkor = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('result-container').style.display = 'none';
+            muatSoal();
+        }
+
+        tampilkanSlide();
+    </script>
+</body>
+</html>
